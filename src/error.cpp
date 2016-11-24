@@ -20,10 +20,10 @@ namespace {
 	}
 }
 
-XError::XError(xcb_generic_error_t error) :
+x_error::x_error(xcb_generic_error_t error) :
 	std::runtime_error(formatMessage(error)), error(error) {}
 
-XError::XError(xcb_generic_error_t error, std::string const & message) :
+x_error::x_error(xcb_generic_error_t error, std::string const & message) :
 	std::runtime_error(formatMessage(error, message)), error(error) {}
 
 }
