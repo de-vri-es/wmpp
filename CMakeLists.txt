@@ -13,3 +13,6 @@ pkg_check_modules(XCB xcb xcb-randr)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 target_include_directories(${PROJECT_NAME} PUBLIC ${XCB_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${XCB_LIBRARIES})
+
+add_executable(example src/main.cpp)
+target_link_libraries(example ${PROJECT_NAME})
