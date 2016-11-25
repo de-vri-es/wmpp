@@ -18,7 +18,7 @@ std::vector<xcb_randr_monitor_info_t> getRandrMonitors(xcb_connection_t * xcb, x
 	xcb_generic_error_t * error = nullptr;
 	auto cookie = xcb_randr_get_monitors(xcb, window, true);
 	auto reply  = wrap_freeing(xcb_randr_get_monitors_reply(xcb, cookie, &error));
-	if (error) throw x_error(*error);
+	if (error) throw x_error(std::move(error));
 	return getRandrMonitors(xcb_randr_get_monitors_monitors_iterator(reply.get()));
 }
 

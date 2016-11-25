@@ -20,10 +20,16 @@ namespace {
 	}
 }
 
-x_error::x_error(xcb_generic_error_t error) :
-	std::runtime_error(formatMessage(error)), error(error) {}
+x_error::x_error(free_pointer<xcb_generic_error_t> error) :
+	std::runtime_error(formatMessage(*error)), error(std::move(error)) {}
 
-x_error::x_error(xcb_generic_error_t error, std::string const & message) :
-	std::runtime_error(formatMessage(error, message)), error(error) {}
+x_error::x_error(xcb_generic_error_t * && error) :
+	std::runtime_error(formatMessage(*error)), error(error) {}
+
+x_error::x_error(free_pointer<xcb_generic_error_t> error, std::string const & message) :
+	std::runtime_error(formatMessage(*error, message)), error(std::move(error)) {}
+
+x_error::x_error(xcb_generic_error_t * && error, std::string const & message) :
+	std::runtime_error(formatMessage(*error, message)), error(error) {}
 
 }
