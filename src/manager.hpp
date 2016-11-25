@@ -1,8 +1,9 @@
 #include <xcb/xcb.h>
 #include <xcb/randr.h>
 
-#include <vector>
+#include <functional>
 #include <tuple>
+#include <vector>
 
 namespace wmpp {
 
@@ -16,6 +17,13 @@ std::vector<xcb_screen_t> getScreens(xcb_setup_t const * setup);
 std::vector<xcb_screen_t> getScreens(xcb_connection_t * connection);
 
 class manager {
+public:
+	std::function<void (manager & manager, xcb_map_request_event_t       & event)> on_map_request;
+	std::function<void (manager & manager, xcb_configure_request_event_t & event)> on_configure_request;
+	std::function<void (manager & manager, xcb_circulate_request_event_t & event)> on_circulate_request;
+	std::function<void (manager & manager, xcb_generic_event_t           & event)> on_other_event;
+
+protected:
 	/// Connection with X server.
 	xcb_connection_t * connection_;
 
@@ -57,6 +65,10 @@ protected:
 	manager(std::tuple<xcb_connection_t *, std::size_t> connection_info, bool auto_disconnect);
 
 public:
+	/// Get the XCB connection used by the manager.
+	xcb_connection_t       * connection()       { return connection_; }
+	xcb_connection_t const * connection() const { return connection_; }
+
 	/// Get the screen index of the managed screen.
 	/**
 	 * This refers to the X11 screen abstraction, not RandR monitors.
@@ -70,6 +82,8 @@ public:
 	xcb_screen_t       & screen()       { return screens_[screen_index_]; }
 	xcb_screen_t const & screen() const { return screens_[screen_index_]; }
 
+	/// Get the root window of the managed screen.
+	xcb_window_t root_window() const { return screen().root; }
 
 	/// Get a list of monitors.
 	/**

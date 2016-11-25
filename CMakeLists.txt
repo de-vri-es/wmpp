@@ -8,7 +8,7 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 find_package(PkgConfig)
-pkg_check_modules(XCB xcb xcb-randr)
+pkg_check_modules(XCB xcb xcb-randr xcb-event)
 
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 target_include_directories(${PROJECT_NAME} PUBLIC ${XCB_INCLUDE_DIRS})
